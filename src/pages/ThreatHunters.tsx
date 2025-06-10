@@ -22,6 +22,7 @@ export default function ThreatHunters() {
       description: 'Systematic evaluation of security weaknesses and risks.',
       color: 'text-red-500'
     },
+    
     {
       icon: Code,
       title: 'Security Analysis',
