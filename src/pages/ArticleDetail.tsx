@@ -10,6 +10,7 @@ interface Article {
   author: string;
   date: string;
   category: string;
+  image: string;
 }
 
 export default function ArticleDetail() {
@@ -72,9 +73,13 @@ export default function ArticleDetail() {
 
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <img
-            src="/image10.jpeg"
+            src={article.image || '/image1.jpeg'}
             alt={article.title}
             className="w-full h-96 object-cover"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = '/image1.jpeg';
+            }}
           />
 
           <div className="p-8">

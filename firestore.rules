@@ -1,9 +1,46 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow all operations for testing
-    match /{document=**} {
-      allow read, write: if true;
+
+    // Users can only read and write to their own document.
+    match /users/{userId} {
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+      allow delete: if false; // Nobody can delete user documents
+    }
+
+    // Anyone can read projects. Authenticated users can create their own projects.
+    // Users can only update/delete their own projects.
+    match /projects/{projectId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Media documents can be read by anyone.
+    // Authenticated users can create media documents for their own user ID.
+    // Users can only update/delete their own media documents.
+    match /media/{mediaId} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Articles can be read by anyone.
+    // Only admins can create, update, or delete articles.
+    // This assumes an 'admin' custom claim. You can set this up using the Firebase Admin SDK.
+    match /articles/{articleId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Anyone can create a contact message.
+    // Only admins can read, update, or delete them.
+    match /contactMessages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
     }
   }
 } 

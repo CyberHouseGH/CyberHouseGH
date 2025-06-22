@@ -213,6 +213,7 @@ export const createArticle = async (articleData: {
   content: string;
   author: string;
   category: string;
+  image?: string;
 }) => {
   try {
     if (!db) {

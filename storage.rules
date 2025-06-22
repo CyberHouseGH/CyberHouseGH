@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow public read access to all files.
+    // This is useful for when you get a download URL and want to display it.
+    match /{allPaths=**} {
+      allow read;
+    }
+
+    // Restrict writes to the 'media' folder.
+    match /media/{allPaths=**} {
+      // Only authenticated users can write.
+      // We also check the file size (max 50MB) and content type.
+      allow write: if request.auth != null
+                   && request.resource.size < 50 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*|video/.*');
+    }
+  }
+} 

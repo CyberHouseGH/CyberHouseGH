@@ -69,7 +69,7 @@ export default function Navbar() {
   const renderUserProfile = () => {
     if (!user) return null;
 
-    const displayName = user.displayName || 'Anonymous';
+    const displayName = user.displayName || user.email || 'Anonymous';
     const photoURL = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`;
 
     return (

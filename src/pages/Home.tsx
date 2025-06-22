@@ -123,7 +123,7 @@ export default function Home() {
                 className="bg-white rounded-lg shadow-md overflow-hidden"
               >
                 <img
-                  src={`ger.gif`}
+                  src={`baa.png`}
                   alt="Cybersecurity"
                   className="w-full h-48 object-cover"
                 />

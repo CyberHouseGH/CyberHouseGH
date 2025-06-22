@@ -6,7 +6,7 @@ const mentors = [
     name: 'Nana Kweku Baah',
     role: 'Developer',
     expertise: ['Tool Development', 'Cybersecurity', 'Scripting'],
-    image: 'image2.jpeg',
+    image: '',
     email: 'nana.baah@cyberhouse.com',
     task: 'Assist the Cyber Innovators with developing or refining a basic cybersecurity tool idea. Guide members with scripting or tool planning .',
     icon: Code
@@ -15,7 +15,7 @@ const mentors = [
     name: 'Efua Bentum',
     role: 'Head of Content Creators & Public Speaking',
     expertise: ['Content Creation', 'Public Speaking', 'Training'],
-    image: 'image7.jpeg',
+    image: 'effuah.jpg',
     email: 'mmefbentum22@gmail.com',
     task: 'Support the Sentinels in preparing content. Also help with content review and delivery quality.',
     icon: BookOpen
@@ -24,7 +24,7 @@ const mentors = [
     name: 'Karim Nurudeen',
     role: 'Head of Developers',
     expertise: ['AI Development', 'Networking', 'Web and Database Administration'],
-    image: 'karim.jpg',
+    image: 'image24.jpg',
     email: 'karimnurudeen13@gmail.com',
     task: 'Oversee the AI Innovators, assists in automation , Provide input and support for technical feasibility.',
     icon: Code
@@ -33,7 +33,7 @@ const mentors = [
     name: 'Dwayne Eshun',
     role: 'Developer',
     expertise: ['Security Tools', 'Penetration Tester', 'Technical Training'],
-    image: 'image10.jpeg',
+    image: 'dwjj.jpeg',
     email: 'dwayne.eshun@cyberhouse.com',
     task: 'Help Threat Hunters (decode mini challenge), (tool discovery). Provide tech help and explanations where needed.',
     icon: Code
@@ -43,7 +43,7 @@ const mentors = [
     name: 'Ebenezar Boadu Tetteh',
     role: 'Marketing Manager',
     expertise: ['Marketing Strategy', 'Brand Development', 'Community Outreach'],
-    image: 'image3.jpeg',
+    image: 'boad.jpg',
     email: 'ebenezar.tetteh@cyberhouse.com',
     task: 'Oversee marketing initiatives and brand development for Cyberhouse.',
     icon: Megaphone
@@ -52,7 +52,7 @@ const mentors = [
     name: 'Johua Taigo',
     role: 'Leader',
     expertise: ['Team Leadership', 'Community Building'],
-    image: 'image1.jpeg',
+    image: 'image8.jpeg',
     email: 'perryessandoh3@gmail.com',
     task: 'Oversees cyberhouse activities.',
     icon: Users
@@ -61,7 +61,7 @@ const mentors = [
     name: 'Perry Essandoh',
     role: 'Chief Executive Officer',
     expertise: ['Team Leadership', 'Community Building'],
-    image: 'perry.jpeg',
+    image: 'pery.jpeg',
     email: 'perryessandoh3@gmail.com',
     task: 'Oversees cyberhouse activities.',
     icon: Users

@@ -1,24 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calendar, User, ArrowRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { createArticle, db } from '../lib/firebase';
+import { createArticle, db, uploadMedia } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { v4 as uuidv4 } from 'uuid';
 import { collection, query, orderBy, getDocs } from 'firebase/firestore';
-
-// Add new interfaces for the news API
-interface NewsArticle {
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-  source: {
-    name: string;
-  };
-  author: string;
-}
 
 interface Article {
   id: string;
@@ -45,6 +31,7 @@ export default function News() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('Trends');
+  const [image, setImage] = useState('');
 
   const categories = [
     'All',
@@ -55,9 +42,15 @@ export default function News() {
     'Career Tips'
   ];
 
-  const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
-  const [newsLoading, setNewsLoading] = useState(true);
-  const [newsError, setNewsError] = useState<string | null>(null);
+  const handleCategoryClick = (category: string) => {
+    if (category === 'Live Feeds') {
+      window.open('https://thehackernews.com', '_blank');
+    } else {
+      setSelectedCategory(category);
+    }
+  };
+
+  const allCategories = [...categories, 'Live Feeds'];
 
   // Fetch articles from Firebase
   useEffect(() => {
@@ -80,7 +73,7 @@ export default function News() {
           fetchedArticles.push({
             ...data,
             id: doc.id,
-            image: '/image1.jpeg',
+            image: data.image || '/image1.jpeg',
             excerpt: data.content.substring(0, 150) + '...'
           });
         });
@@ -97,49 +90,6 @@ export default function News() {
 
     fetchArticles();
   }, []); // Remove authLoading dependency since we allow public read
-
-  // Add new useEffect for fetching live news
-  useEffect(() => {
-    const fetchNews = async () => {
-      setNewsLoading(true);
-      setNewsError(null);
-      try {
-        const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-        console.log('API Key available:', !!API_KEY); // Debug line
-
-        if (!API_KEY) {
-          throw new Error('News API key is not configured');
-        }
-
-        // Log the full URL we're trying to fetch (remove this in production)
-        const url = `https://newsapi.org/v2/everything?q=cybersecurity+tips+AND+security&sortBy=publishedAt&language=en&apiKey=${API_KEY}`;
-        console.log('Fetching from:', url); // Debug line
-
-        const response = await fetch(url);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch news');
-        }
-
-        const data = await response.json();
-        console.log('API Response:', data); // Debug line
-
-        if (!data.articles || !Array.isArray(data.articles)) {
-          throw new Error('Invalid response format from News API');
-        }
-
-        setNewsArticles(data.articles.slice(0, 6));
-      } catch (error) {
-        console.error('Error fetching news:', error);
-        setNewsError(error instanceof Error ? error.message : 'Failed to fetch news');
-      } finally {
-        setNewsLoading(false);
-      }
-    };
-
-    fetchNews();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,7 +109,8 @@ export default function News() {
         title,
         content,
         author: user.email || 'Anonymous',
-        category
+        category,
+        image
       });
 
       if (!result.success) {
@@ -174,7 +125,7 @@ export default function News() {
         author: user.email || 'Anonymous',
         category,
         date: new Date().toISOString(),
-        image: '/image5.jpeg',
+        image: image || '/image1.jpeg',
         excerpt: content.substring(0, 150) + '...'
       };
 
@@ -183,6 +134,7 @@ export default function News() {
       setTitle('');
       setContent('');
       setCategory('Trends');
+      setImage('');
       setTimeout(() => {
         setShowSubmitModal(false);
         setSuccess(null);
@@ -223,10 +175,10 @@ export default function News() {
       <section className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-wrap gap-4">
-            {categories.map((category) => (
+            {allCategories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryClick(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
                   ${category === selectedCategory
                     ? 'bg-cyan-500 text-white'
@@ -236,67 +188,6 @@ export default function News() {
               </button>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Live Cybersecurity News Section */}
-      <section className="py-16 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-8">Latest Cybersecurity Updates</h2>
-
-          {newsLoading && (
-            <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
-            </div>
-          )}
-
-          {newsError && (
-            <div className="bg-red-900/50 border border-red-500 text-red-200 p-4 rounded-lg mb-8">
-              <p>{newsError}</p>
-            </div>
-          )}
-
-          {!newsLoading && !newsError && newsArticles.length === 0 && (
-            <div className="text-center text-gray-300">
-              <p>No news articles available at the moment.</p>
-            </div>
-          )}
-
-          {!newsLoading && !newsError && newsArticles.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {newsArticles.map((article, index) => (
-                <article key={index} className="bg-gray-800 rounded-lg overflow-hidden">
-                  {article.urlToImage && (
-                    <img
-                      src={article.urlToImage}
-                      alt={article.title}
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = '/fallback-image.jpg'; // Add a fallback image
-                        e.currentTarget.onerror = null; // Prevent infinite loop
-                      }}
-                    />
-                  )}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-2">{article.title}</h3>
-                    <p className="text-gray-300 mb-4 line-clamp-2">{article.description}</p>
-                    <div className="flex items-center text-sm text-gray-400 mb-4">
-                      <Calendar className="h-4 w-4 mr-1" />
-                      <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
-                    </div>
-                    <a
-                      href={article.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center text-cyan-400 hover:text-cyan-300"
-                    >
-                      Read Full Article <ArrowRight className="h-4 w-4 ml-1" />
-                    </a>
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
         </div>
       </section>
 
@@ -315,6 +206,10 @@ export default function News() {
                     src={article.image}
                     alt={article.title}
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null; // Prevent infinite loop if fallback fails
+                      e.currentTarget.src = '/image1.jpeg'; // Default fallback image
+                    }}
                   />
                   <div className="p-6">
                     <div className="flex items-center mb-4">
@@ -396,6 +291,20 @@ export default function News() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-2">
+                  Image URL
+                </label>
+                <input
+                  type="text"
+                  id="image"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="https://example.com/image.jpg"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>

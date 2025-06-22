@@ -33,6 +33,7 @@ export default function Projects() {
   const [loading, setLoading] = useState(true);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { user, loading: authLoading } = useAuth();
+  const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null);
 
   useEffect(() => {
     console.log('Projects component mounted');
@@ -159,6 +160,10 @@ export default function Projects() {
     setShowAuthDialog(false);
   };
 
+  const handleProjectClick = (projectId: string) => {
+    setExpandedProjectId(prevId => prevId === projectId ? null : projectId);
+  };
+
   if (authLoading || loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -275,11 +280,11 @@ export default function Projects() {
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
               {projects.map((project) => (
-                <div key={project.id} className="bg-gray-50 rounded-lg overflow-hidden shadow-lg">
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
+                <div key={project.id} className="bg-gray-50 rounded-lg overflow-hidden shadow-lg transition-all duration-300 ease-in-out" onClick={() => handleProjectClick(project.id)}>
+                  <div className="p-6 cursor-pointer">
+                    <div className="flex items-center">
                       <img
                         src={project.userProfile?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(project.userProfile?.name || 'Anonymous')}&background=random`}
                         alt={project.userProfile?.name}
@@ -290,19 +295,23 @@ export default function Projects() {
                         <p className="text-sm text-gray-500">{project.userProfile?.email}</p>
                       </div>
                     </div>
-                    <h4 className="text-xl font-semibold mb-3">{project.title}</h4>
-                    <p className="text-gray-600 mb-4">{project.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className={`text-sm px-3 py-1 rounded-full ${project.status === 'Approved' ? 'bg-green-100 text-green-800' :
-                        project.status === 'Pending Review' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-blue-100 text-blue-800'
-                        }`}>
-                        {project.status}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {new Date(project.createdAt).toLocaleDateString()}
-                      </span>
-                    </div>
+                    {expandedProjectId === project.id && (
+                      <div className="mt-4">
+                        <h4 className="text-xl font-semibold mb-3">{project.title}</h4>
+                        <p className="text-gray-600 mb-4">{project.description}</p>
+                        <div className="flex justify-between items-center">
+                          <span className={`text-sm px-3 py-1 rounded-full ${project.status === 'Approved' ? 'bg-green-100 text-green-800' :
+                            project.status === 'Pending Review' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-blue-100 text-blue-800'
+                            }`}>
+                            {project.status}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {new Date(project.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
