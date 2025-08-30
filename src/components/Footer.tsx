@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Twitter, Linkedin, Github, Instagram, Youtube, Video } from 'lucide-react';
+import { Twitter, Instagram, Youtube, Video } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -47,12 +47,7 @@ export default function Footer() {
               <a href="https://x.com/CyberHouse008?t=SHWOSu7jMfqps6gO9ADZpw&s=09" className="text-gray-400 hover:text-cyan-500">
                 <Twitter className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-cyan-500">
-                <Linkedin className="h-6 w-6" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-cyan-500">
-                <Github className="h-6 w-6" />
-              </a>
+
               <a href="https://www.instagram.com/cyberhouse008/?igsh=cnF0MHhmczVuOGJz" className="text-gray-400 hover:text-cyan-500">
                 <Instagram className="h-6 w-6" />
               </a>

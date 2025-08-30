@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Twitter, Linkedin, Github, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Twitter, Instagram } from 'lucide-react';
 import { sendContactMessage } from '../lib/firebase';
 
 export default function Contact() {
@@ -134,7 +134,7 @@ export default function Contact() {
                   <Mail className="h-6 w-6 text-cyan-500 mt-1" />
                   <div className="ml-4">
                     <h3 className="text-lg font-medium">Email</h3>
-                    <p className="text-gray-600">cyberhouseghana@gmail.com</p>
+                    <p className="text-gray-600">cyberhouse008@gmail.com</p>
                   </div>
                 </div>
 
@@ -142,7 +142,7 @@ export default function Contact() {
                   <Phone className="h-6 w-6 text-cyan-500 mt-1" />
                   <div className="ml-4">
                     <h3 className="text-lg font-medium">Phone</h3>
-                    <p className="text-gray-600">+233 -598730049</p>
+                    <p className="text-gray-600">+233 -208394038</p>
                   </div>
                 </div>
 
@@ -151,8 +151,6 @@ export default function Contact() {
                   <div className="ml-4">
                     <h3 className="text-lg font-medium">Location</h3>
                     <p className="text-gray-600">
-                      ACCRA TECHNICAL UNIVERSITY<br />
-                      TUDU<br />
                       ACCRA-GHANA
                     </p>
                   </div>
@@ -162,25 +160,15 @@ export default function Contact() {
                   <h3 className="text-lg font-medium mb-4">Follow us</h3>
                   <div className="flex space-x-4">
                     <a
-                      href="#"
+                      href="https://x.com/CyberHouse008?t=SHWOSu7jMfqps6gO9ADZpw&s=09"
                       className="text-gray-400 hover:text-cyan-500 transition-colors"
                     >
                       <Twitter className="h-6 w-6" />
                     </a>
+
+
                     <a
-                      href="#"
-                      className="text-gray-400 hover:text-cyan-500 transition-colors"
-                    >
-                      <Linkedin className="h-6 w-6" />
-                    </a>
-                    <a
-                      href="#"
-                      className="text-gray-400 hover:text-cyan-500 transition-colors"
-                    >
-                      <Github className="h-6 w-6" />
-                    </a>
-                    <a
-                      href="#"
+                      href="https://www.instagram.com/cyberhouse008/?igsh=cnF0MHhmczVuOGJz"
                       className="text-gray-400 hover:text-cyan-500 transition-colors"
                     >
                       <Instagram className="h-6 w-6" />
